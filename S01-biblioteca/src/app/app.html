@@ -1,0 +1,766 @@
+<div class="app">
+
+  <aside class="sidebar">
+
+    <div class="logo">
+      📚 <span>Biblioteca</span>
+    </div>
+
+    <nav>
+
+      <button
+        [class.activo]="seccion === 'inicio'"
+        (click)="cambiarSeccion('inicio')">
+        🏠 Inicio
+      </button>
+
+      <button
+        [class.activo]="seccion === 'libros'"
+        (click)="cambiarSeccion('libros')">
+        📚 Libros
+      </button>
+
+      <button
+        [class.activo]="seccion === 'tienda'"
+        (click)="cambiarSeccion('tienda')">
+        🛒 Tienda
+      </button>
+
+      <button
+        [class.activo]="seccion === 'ventas'"
+        (click)="cambiarSeccion('ventas')">
+        💰 Ventas
+      </button>
+
+      <button
+        [class.activo]="seccion === 'inventario'"
+        (click)="cambiarSeccion('inventario')">
+        📦 Inventario
+      </button>
+
+      <button
+        [class.activo]="seccion === 'contactos'"
+        (click)="cambiarSeccion('contactos')">
+        👥 Contactos
+      </button>
+
+      <button
+        [class.activo]="seccion === 'reservas'"
+        (click)="cambiarSeccion('reservas')">
+        📅 Reservas
+      </button>
+
+      <button
+        [class.activo]="seccion === 'citas'"
+        (click)="cambiarSeccion('citas')">
+        🕐 Citas
+      </button>
+
+    </nav>
+
+  </aside>
+
+
+  <main class="contenido">
+
+    <!-- INICIO -->
+
+    <section *ngIf="seccion === 'inicio'">
+
+      <h1>Panel de Biblioteca</h1>
+
+      <p class="subtitulo">
+        Sistema de gestión y registro de libros
+      </p>
+
+      <div class="cards">
+
+        <div class="card">
+          📚
+          <h3>Libros</h3>
+          <strong>{{ libros.length }}</strong>
+        </div>
+
+        <div class="card">
+          🛒
+          <h3>Ventas</h3>
+          <strong>{{ ventas.length }}</strong>
+        </div>
+
+        <div class="card">
+          📦
+          <h3>Inventario</h3>
+          <strong>{{ libros.length }}</strong>
+        </div>
+
+        <div class="card">
+          👥
+          <h3>Contactos</h3>
+          <strong>{{ contactos.length }}</strong>
+        </div>
+
+        <div class="card">
+          📅
+          <h3>Reservas</h3>
+          <strong>{{ reservas.length }}</strong>
+        </div>
+
+        <div class="card">
+          🕐
+          <h3>Citas</h3>
+          <strong>{{ citas.length }}</strong>
+        </div>
+
+      </div>
+
+      <div class="resumen">
+
+        <h2>Resumen</h2>
+
+        <p>
+          Total de ventas:
+          <strong>S/ {{ totalVentas.toFixed(2) }}</strong>
+        </p>
+
+        <p>
+          Libros agotados:
+          <strong>{{ librosAgotados }}</strong>
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- LIBROS -->
+
+    <section *ngIf="seccion === 'libros'">
+
+      <h1>📚 Registro de Libros</h1>
+
+      <p class="subtitulo">
+        Administra los libros de la biblioteca
+      </p>
+
+      <div class="formulario">
+
+        <h2>Registrar libro</h2>
+
+        <div class="grid">
+
+          <div class="campo">
+            <label>Título</label>
+            <input
+              [(ngModel)]="nuevoLibro.titulo"
+              placeholder="Título del libro">
+          </div>
+
+          <div class="campo">
+            <label>Autor</label>
+            <input
+              [(ngModel)]="nuevoLibro.autor"
+              placeholder="Autor">
+          </div>
+
+          <div class="campo">
+            <label>Categoría</label>
+            <select [(ngModel)]="nuevoLibro.categoria">
+              <option value="">Seleccionar</option>
+              <option>Novela</option>
+              <option>Fantasía</option>
+              <option>Clásico</option>
+              <option>Ciencia</option>
+              <option>Historia</option>
+              <option>Tecnología</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label>ISBN</label>
+            <input
+              [(ngModel)]="nuevoLibro.isbn"
+              placeholder="ISBN">
+          </div>
+
+          <div class="campo">
+            <label>Año</label>
+            <input
+              type="number"
+              [(ngModel)]="nuevoLibro.anio">
+          </div>
+
+          <div class="campo">
+            <label>Stock</label>
+            <input
+              type="number"
+              [(ngModel)]="nuevoLibro.stock">
+          </div>
+
+          <div class="campo">
+            <label>Precio</label>
+            <input
+              type="number"
+              [(ngModel)]="nuevoLibro.precio">
+          </div>
+
+        </div>
+
+        <button
+          class="btn principal"
+          (click)="agregarLibro()">
+          ➕ Registrar libro
+        </button>
+
+      </div>
+
+
+      <div class="tabla">
+
+        <input
+          class="buscador"
+          [(ngModel)]="busqueda"
+          placeholder="🔎 Buscar libro, autor o categoría">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>Categoría</th>
+              <th>ISBN</th>
+              <th>Año</th>
+              <th>Stock</th>
+              <th>Precio</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let libro of librosFiltrados">
+
+              <td>{{ libro.id }}</td>
+              <td>{{ libro.titulo }}</td>
+              <td>{{ libro.autor }}</td>
+              <td>{{ libro.categoria }}</td>
+              <td>{{ libro.isbn }}</td>
+              <td>{{ libro.anio }}</td>
+              <td>{{ libro.stock }}</td>
+              <td>S/ {{ libro.precio }}</td>
+
+              <td>
+                <button
+                  class="btn eliminar"
+                  (click)="eliminarLibro(libro.id)">
+                  🗑️
+                </button>
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- TIENDA -->
+
+    <section *ngIf="seccion === 'tienda'">
+
+      <h1>🛒 Tienda de Libros</h1>
+
+      <p class="subtitulo">
+        Libros disponibles para comprar
+      </p>
+
+      <div class="productos">
+
+        <div
+          class="producto"
+          *ngFor="let libro of libros">
+
+          <div class="icono">📖</div>
+
+          <h2>{{ libro.titulo }}</h2>
+
+          <p>{{ libro.autor }}</p>
+
+          <span>{{ libro.categoria }}</span>
+
+          <h3>S/ {{ libro.precio }}</h3>
+
+          <p>
+            Disponible: {{ libro.stock }}
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- VENTAS -->
+
+    <section *ngIf="seccion === 'ventas'">
+
+      <h1>💰 Ventas de Libros</h1>
+
+      <div class="formulario">
+
+        <div class="grid">
+
+          <div class="campo">
+
+            <label>Libro</label>
+
+            <select [(ngModel)]="nuevaVenta.libro">
+
+              <option value="">
+                Seleccionar libro
+              </option>
+
+              <option
+                *ngFor="let libro of libros"
+                [value]="libro.titulo">
+
+                {{ libro.titulo }}
+
+              </option>
+
+            </select>
+
+          </div>
+
+          <div class="campo">
+
+            <label>Cantidad</label>
+
+            <input
+              type="number"
+              min="1"
+              [(ngModel)]="nuevaVenta.cantidad">
+
+          </div>
+
+        </div>
+
+        <button
+          class="btn principal"
+          (click)="realizarVenta()">
+
+          💰 Registrar venta
+
+        </button>
+
+      </div>
+
+
+      <div class="tabla">
+
+        <h2>Historial de ventas</h2>
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Libro</th>
+              <th>Cantidad</th>
+              <th>Total</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let venta of ventas">
+
+              <td>{{ venta.id }}</td>
+              <td>{{ venta.libro }}</td>
+              <td>{{ venta.cantidad }}</td>
+              <td>S/ {{ venta.total }}</td>
+              <td>{{ venta.fecha }}</td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+        <p *ngIf="ventas.length === 0" class="vacio">
+          Todavía no hay ventas.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- INVENTARIO -->
+
+    <section *ngIf="seccion === 'inventario'">
+
+      <h1>📦 Inventario de Libros</h1>
+
+      <p class="subtitulo">
+        Control de existencias de la biblioteca
+      </p>
+
+      <div class="tabla">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Libro</th>
+              <th>Autor</th>
+              <th>Categoría</th>
+              <th>Stock</th>
+              <th>Precio</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let libro of libros">
+
+              <td>{{ libro.id }}</td>
+              <td>{{ libro.titulo }}</td>
+              <td>{{ libro.autor }}</td>
+              <td>{{ libro.categoria }}</td>
+              <td>{{ libro.stock }}</td>
+              <td>S/ {{ libro.precio }}</td>
+
+              <td>
+
+                <span
+                  class="estado"
+                  [class.agotado]="libro.stock === 0">
+
+                  {{ libro.stock > 0 ? 'Disponible' : 'Agotado' }}
+
+                </span>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- CONTACTOS -->
+
+    <section *ngIf="seccion === 'contactos'">
+
+      <h1>👥 Contactos</h1>
+
+      <div class="formulario">
+
+        <div class="grid">
+
+          <div class="campo">
+            <label>Nombre</label>
+            <input [(ngModel)]="nuevoContacto.nombre">
+          </div>
+
+          <div class="campo">
+            <label>Correo</label>
+            <input
+              type="email"
+              [(ngModel)]="nuevoContacto.correo">
+          </div>
+
+          <div class="campo">
+            <label>Teléfono</label>
+            <input [(ngModel)]="nuevoContacto.telefono">
+          </div>
+
+          <div class="campo">
+            <label>Mensaje</label>
+            <input [(ngModel)]="nuevoContacto.mensaje">
+          </div>
+
+        </div>
+
+        <button
+          class="btn principal"
+          (click)="agregarContacto()">
+
+          Registrar contacto
+
+        </button>
+
+      </div>
+
+
+      <div class="tabla">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+              <th>Mensaje</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let contacto of contactos">
+
+              <td>{{ contacto.nombre }}</td>
+              <td>{{ contacto.correo }}</td>
+              <td>{{ contacto.telefono }}</td>
+              <td>{{ contacto.mensaje }}</td>
+
+              <td>
+
+                <button
+                  class="btn eliminar"
+                  (click)="eliminarContacto(contacto.id)">
+
+                  🗑️
+
+                </button>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+        <p *ngIf="contactos.length === 0" class="vacio">
+          No hay contactos registrados.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- RESERVAS -->
+
+    <section *ngIf="seccion === 'reservas'">
+
+      <h1>📅 Reservas de Libros</h1>
+
+      <div class="formulario">
+
+        <div class="grid">
+
+          <div class="campo">
+            <label>Cliente</label>
+            <input [(ngModel)]="nuevaReserva.cliente">
+          </div>
+
+          <div class="campo">
+
+            <label>Libro</label>
+
+            <select [(ngModel)]="nuevaReserva.libro">
+
+              <option value="">
+                Seleccionar libro
+              </option>
+
+              <option
+                *ngFor="let libro of libros"
+                [value]="libro.titulo">
+
+                {{ libro.titulo }}
+
+              </option>
+
+            </select>
+
+          </div>
+
+          <div class="campo">
+            <label>Fecha</label>
+            <input
+              type="date"
+              [(ngModel)]="nuevaReserva.fecha">
+          </div>
+
+        </div>
+
+        <button
+          class="btn principal"
+          (click)="agregarReserva()">
+
+          📅 Registrar reserva
+
+        </button>
+
+      </div>
+
+
+      <div class="tabla">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Libro</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let reserva of reservas">
+
+              <td>{{ reserva.cliente }}</td>
+              <td>{{ reserva.libro }}</td>
+              <td>{{ reserva.fecha }}</td>
+              <td>{{ reserva.estado }}</td>
+
+              <td>
+
+                <button
+                  class="btn eliminar"
+                  (click)="cancelarReserva(reserva.id)">
+
+                  Cancelar
+
+                </button>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- CITAS -->
+
+    <section *ngIf="seccion === 'citas'">
+
+      <h1>🕐 Citas</h1>
+
+      <p class="subtitulo">
+        Agenda de citas de la biblioteca
+      </p>
+
+      <div class="formulario">
+
+        <div class="grid">
+
+          <div class="campo">
+            <label>Cliente</label>
+            <input [(ngModel)]="nuevaCita.cliente">
+          </div>
+
+          <div class="campo">
+            <label>Fecha</label>
+            <input
+              type="date"
+              [(ngModel)]="nuevaCita.fecha">
+          </div>
+
+          <div class="campo">
+            <label>Hora</label>
+            <input
+              type="time"
+              [(ngModel)]="nuevaCita.hora">
+          </div>
+
+          <div class="campo">
+            <label>Motivo</label>
+            <input
+              [(ngModel)]="nuevaCita.motivo"
+              placeholder="Ej. Asesoría de lectura">
+          </div>
+
+        </div>
+
+        <button
+          class="btn principal"
+          (click)="agregarCita()">
+
+          🕐 Registrar cita
+
+        </button>
+
+      </div>
+
+
+      <div class="tabla">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Motivo</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let cita of citas">
+
+              <td>{{ cita.cliente }}</td>
+              <td>{{ cita.fecha }}</td>
+              <td>{{ cita.hora }}</td>
+              <td>{{ cita.motivo }}</td>
+              <td>{{ cita.estado }}</td>
+
+              <td>
+
+                <button
+                  class="btn eliminar"
+                  (click)="cancelarCita(cita.id)">
+
+                  Cancelar
+
+                </button>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
